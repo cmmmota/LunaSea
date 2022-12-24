@@ -64,15 +64,12 @@ class _State extends State<SettingsHeaderRoute> with LunaScrollControllerMixin {
     );
   }
 
-  Widget _noHeadersFound() =>
-      LunaMessage.inList(text: 'settings.NoHeadersAdded'.tr());
+  Widget _noHeadersFound() => LunaMessage.inList(text: 'settings.NoHeadersAdded'.tr());
 
   List<LunaBlock> _headerList() {
     final headers = _headers();
     List<String> _sortedKeys = headers.keys.toList()..sort();
-    return _sortedKeys
-        .map<LunaBlock>((key) => _headerBlock(key, headers[key]))
-        .toList();
+    return _sortedKeys.map<LunaBlock>((key) => _headerBlock(key, headers[key])).toList();
   }
 
   LunaBlock _headerBlock(String key, String? value) {
@@ -119,6 +116,8 @@ class _State extends State<SettingsHeaderRoute> with LunaScrollControllerMixin {
         return LunaProfile.current.overseerrHeaders;
       case LunaModule.TAUTULLI:
         return LunaProfile.current.tautulliHeaders;
+      case LunaModule.TRANSMISSION:
+        throw Exception('Transmission does not have a headers page');
     }
   }
 
@@ -148,6 +147,8 @@ class _State extends State<SettingsHeaderRoute> with LunaScrollControllerMixin {
         return context.read<TautulliState>().reset();
       case LunaModule.OVERSEERR:
         return context.read<OverseerrState>().reset();
+      case LunaModule.TRANSMISSION:
+        throw Exception('Transmission does not have a headers page');
     }
   }
 }

@@ -149,6 +149,22 @@ class LunaProfile extends HiveObject {
   @HiveField(43, defaultValue: <String, String>{})
   Map<String, String> overseerrHeaders;
 
+  @JsonKey()
+  @HiveField(50, defaultValue: false)
+  bool transmissionEnabled;
+
+  @JsonKey()
+  @HiveField(51, defaultValue: '')
+  String transmissionHost;
+
+  @JsonKey()
+  @HiveField(52, defaultValue: '')
+  String transmissionUsername;
+
+  @JsonKey()
+  @HiveField(53, defaultValue: <String, String>{})
+  String transmissionPassword;
+
   LunaProfile._internal({
     //Lidarr
     required this.lidarrEnabled,
@@ -190,6 +206,11 @@ class LunaProfile extends HiveObject {
     required this.overseerrHost,
     required this.overseerrKey,
     required this.overseerrHeaders,
+    //Transmission
+    required this.transmissionEnabled,
+    required this.transmissionHost,
+    required this.transmissionUsername,
+    required this.transmissionPassword,
   });
 
   factory LunaProfile({
@@ -233,6 +254,11 @@ class LunaProfile extends HiveObject {
     String? overseerrHost,
     String? overseerrKey,
     Map<String, String>? overseerrHeaders,
+    //Overseerr
+    bool? transmissionEnabled,
+    String? transmissionHost,
+    String? transmissionUsername,
+    String? transmissionPassword,
   }) {
     return LunaProfile._internal(
       // Lidarr
@@ -275,6 +301,12 @@ class LunaProfile extends HiveObject {
       overseerrHost: overseerrHost ?? '',
       overseerrKey: overseerrKey ?? '',
       overseerrHeaders: overseerrHeaders ?? {},
+      // Transmission
+      // Overseerr
+      transmissionEnabled: transmissionEnabled ?? false,
+      transmissionHost: transmissionHost ?? '',
+      transmissionUsername: transmissionUsername ?? '',
+      transmissionPassword: transmissionPassword ?? '',
     );
   }
 

@@ -56,9 +56,7 @@ enum LunaSeaDatabase<T> with LunaTableMixin<T> {
     LunaSeaDatabase db = this;
     switch (db) {
       case LunaSeaDatabase.DRAWER_MANUAL_ORDER:
-        return LunaDrawer.moduleOrderedList()
-            .map<String>((module) => module.key)
-            .toList();
+        return LunaDrawer.moduleOrderedList().map<String>((module) => module.key).toList();
       default:
         return super.export();
     }

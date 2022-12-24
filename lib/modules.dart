@@ -35,6 +35,7 @@ const MODULE_SETTINGS_KEY = 'settings';
 const MODULE_SONARR_KEY = 'sonarr';
 const MODULE_TAUTULLI_KEY = 'tautulli';
 const MODULE_WAKE_ON_LAN_KEY = 'wake_on_lan';
+const MODULE_TRANSMISSION_KEY = 'transmission';
 
 @HiveType(typeId: 25, adapterName: 'LunaModuleAdapter')
 enum LunaModule {
@@ -61,7 +62,9 @@ enum LunaModule {
   @HiveField(9)
   TAUTULLI(MODULE_TAUTULLI_KEY),
   @HiveField(10)
-  WAKE_ON_LAN(MODULE_WAKE_ON_LAN_KEY);
+  WAKE_ON_LAN(MODULE_WAKE_ON_LAN_KEY),
+  @HiveField(12)
+  TRANSMISSION(MODULE_TRANSMISSION_KEY);
 
   final String key;
   const LunaModule(this.key);
@@ -92,6 +95,8 @@ enum LunaModule {
         return LunaModule.WAKE_ON_LAN;
       case MODULE_EXTERNAL_MODULES_KEY:
         return LunaModule.EXTERNAL_MODULES;
+      case MODULE_TRANSMISSION_KEY:
+        return LunaModule.TRANSMISSION;
     }
     return null;
   }
@@ -143,6 +148,8 @@ extension LunaModuleEnablementExtension on LunaModule {
         return LunaProfile.current.wakeOnLANEnabled;
       case LunaModule.EXTERNAL_MODULES:
         return !LunaBox.externalModules.isEmpty;
+      case LunaModule.TRANSMISSION:
+        return LunaProfile.current.transmissionEnabled;
     }
   }
 }
@@ -174,6 +181,8 @@ extension LunaModuleMetadataExtension on LunaModule {
         return 'Wake on LAN';
       case LunaModule.EXTERNAL_MODULES:
         return 'lunasea.ExternalModules'.tr();
+      case LunaModule.TRANSMISSION:
+        return 'Transmission';
     }
   }
 
@@ -203,6 +212,8 @@ extension LunaModuleMetadataExtension on LunaModule {
         return Icons.settings_remote_rounded;
       case LunaModule.EXTERNAL_MODULES:
         return Icons.settings_ethernet_rounded;
+      case LunaModule.TRANSMISSION:
+        return LunaIcons.TRANSMISSION;
     }
   }
 
@@ -232,6 +243,8 @@ extension LunaModuleMetadataExtension on LunaModule {
         return LunaColours.accent;
       case LunaModule.EXTERNAL_MODULES:
         return LunaColours.accent;
+      case LunaModule.TRANSMISSION:
+        return const Color.fromARGB(255, 255, 14, 14);
     }
   }
 
@@ -261,6 +274,8 @@ extension LunaModuleMetadataExtension on LunaModule {
         return null;
       case LunaModule.EXTERNAL_MODULES:
         return null;
+      case LunaModule.TRANSMISSION:
+        return 'https://transmissionbt.com/';
     }
   }
 
@@ -290,6 +305,8 @@ extension LunaModuleMetadataExtension on LunaModule {
         return null;
       case LunaModule.EXTERNAL_MODULES:
         return null;
+      case LunaModule.TRANSMISSION:
+        return 'https://github.com/transmission/transmission';
     }
   }
 
@@ -319,6 +336,8 @@ extension LunaModuleMetadataExtension on LunaModule {
         return 'Wake Your Machine';
       case LunaModule.EXTERNAL_MODULES:
         return 'Access External Modules';
+      case LunaModule.TRANSMISSION:
+        return 'Manage torrents';
     }
   }
 
@@ -348,6 +367,8 @@ extension LunaModuleMetadataExtension on LunaModule {
         return 'Wake on LAN is an industry standard protocol for waking computers up from a very low power mode remotely by sending a specially constructed packet to the machine.';
       case LunaModule.EXTERNAL_MODULES:
         return 'LunaSea allows you to add links to additional modules that are not currently supported allowing you to open the module\'s web GUI without having to leave LunaSea!';
+      case LunaModule.TRANSMISSION:
+        return 'Transmission is a fast, easy, and free BitTorrent client';
     }
   }
 }
@@ -379,6 +400,8 @@ extension LunaModuleRoutingExtension on LunaModule {
         return null;
       case LunaModule.EXTERNAL_MODULES:
         return LunaRoutes.externalModules.root.path;
+      case LunaModule.TRANSMISSION:
+        return LunaRoutes.transmission.root.path;
     }
   }
 
@@ -408,6 +431,8 @@ extension LunaModuleRoutingExtension on LunaModule {
         return SettingsRoutes.CONFIGURATION_WAKE_ON_LAN;
       case LunaModule.EXTERNAL_MODULES:
         return SettingsRoutes.CONFIGURATION_EXTERNAL_MODULES;
+      case LunaModule.TRANSMISSION:
+        return SettingsRoutes.CONFIGURATION_TRANSMISSION;
     }
   }
 

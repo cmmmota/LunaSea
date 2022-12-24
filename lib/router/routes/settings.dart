@@ -48,6 +48,8 @@ import 'package:lunasea/modules/settings/routes/configuration_tautulli/pages/con
 import 'package:lunasea/modules/settings/routes/configuration_tautulli/pages/default_pages.dart';
 import 'package:lunasea/modules/settings/routes/configuration_tautulli/pages/headers.dart';
 import 'package:lunasea/modules/settings/routes/configuration_tautulli/route.dart';
+import 'package:lunasea/modules/settings/routes/configuration_transmission/pages.dart';
+import 'package:lunasea/modules/settings/routes/configuration_transmission/route.dart';
 import 'package:lunasea/modules/settings/routes/configuration_wake_on_lan/route.dart';
 import 'package:lunasea/modules/settings/routes/debug_menu/pages/ui.dart';
 import 'package:lunasea/modules/settings/routes/debug_menu/route.dart';
@@ -113,6 +115,8 @@ enum SettingsRoutes with LunaRoutesMixin {
   CONFIGURATION_TAUTULLI_CONNECTION_DETAILS('connection_details'),
   CONFIGURATION_TAUTULLI_CONNECTION_DETAILS_HEADERS('headers'),
   CONFIGURATION_TAUTULLI_DEFAULT_PAGES('default_pages'),
+  CONFIGURATION_TRANSMISSION('transmission'),
+  CONFIGURATION_TRANSMISSION_CONNECTION_DETAILS('connection_details'),
   CONFIGURATION_WAKE_ON_LAN('wake_on_lan'),
   DEBUG_MENU('debug_menu'),
   DEBUG_MENU_UI('ui'),
@@ -267,6 +271,10 @@ enum SettingsRoutes with LunaRoutesMixin {
         );
       case SettingsRoutes.CONFIGURATION_TAUTULLI_DEFAULT_PAGES:
         return route(widget: const ConfigurationTautulliDefaultPagesRoute());
+      case SettingsRoutes.CONFIGURATION_TRANSMISSION:
+        return route(widget: const ConfigurationTransmissionRoute());
+      case SettingsRoutes.CONFIGURATION_TRANSMISSION_CONNECTION_DETAILS:
+        return route(widget: const ConfigurationTransmissionConnectionDetailsRoute());
       case SettingsRoutes.CONFIGURATION_WAKE_ON_LAN:
         return route(widget: const ConfigurationWakeOnLANRoute());
       case SettingsRoutes.DEBUG_MENU:
@@ -360,8 +368,7 @@ enum SettingsRoutes with LunaRoutesMixin {
         ];
       case SettingsRoutes.CONFIGURATION_OVERSEERR_CONNECTION_DETAILS:
         return [
-          SettingsRoutes
-              .CONFIGURATION_OVERSEERR_CONNECTION_DETAILS_HEADERS.routes,
+          SettingsRoutes.CONFIGURATION_OVERSEERR_CONNECTION_DETAILS_HEADERS.routes,
         ];
       case SettingsRoutes.CONFIGURATION_RADARR:
         return [
@@ -380,8 +387,7 @@ enum SettingsRoutes with LunaRoutesMixin {
         ];
       case SettingsRoutes.CONFIGURATION_SABNZBD_CONNECTION_DETAILS:
         return [
-          SettingsRoutes
-              .CONFIGURATION_SABNZBD_CONNECTION_DETAILS_HEADERS.routes,
+          SettingsRoutes.CONFIGURATION_SABNZBD_CONNECTION_DETAILS_HEADERS.routes,
         ];
       case SettingsRoutes.CONFIGURATION_SEARCH:
         return [
@@ -413,8 +419,7 @@ enum SettingsRoutes with LunaRoutesMixin {
         ];
       case SettingsRoutes.CONFIGURATION_TAUTULLI_CONNECTION_DETAILS:
         return [
-          SettingsRoutes
-              .CONFIGURATION_TAUTULLI_CONNECTION_DETAILS_HEADERS.routes,
+          SettingsRoutes.CONFIGURATION_TAUTULLI_CONNECTION_DETAILS_HEADERS.routes,
         ];
       case SettingsRoutes.DEBUG_MENU:
         return [
