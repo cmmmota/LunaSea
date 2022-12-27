@@ -22,17 +22,55 @@ class TransmissionUtilities {
       case TransmissionTorrentStatus.CHECK_WAIT:
       case TransmissionTorrentStatus.DOWNLOAD_WAIT:
       case TransmissionTorrentStatus.SEED_WAIT:
-        return Icons.pause_circle;
+        return Icons.circle;
       case TransmissionTorrentStatus.CHECK:
         return LunaIcons.CONNECTION_TEST;
       case TransmissionTorrentStatus.DOWNLOAD:
         return Icons.download;
       case TransmissionTorrentStatus.STOPPED:
-        return Icons.stop;
+        return Icons.pause;
       case TransmissionTorrentStatus.SEED:
         return Icons.upload;
       default:
         return LunaIcons.TRANSMISSION;
     }
+  }
+
+  static foregroundColor(TransmissionTorrent torrent) {
+    if (torrent.error != TransmissionTorrentError.OK) {
+      return LunaColours.red;
+    }
+
+    switch (torrent.status) {
+      case TransmissionTorrentStatus.SEED_WAIT:
+      case TransmissionTorrentStatus.CHECK_WAIT:
+      case TransmissionTorrentStatus.DOWNLOAD_WAIT:
+      case TransmissionTorrentStatus.STOPPED:
+        return LunaColours.grey;
+      case TransmissionTorrentStatus.SEED:
+        return LunaColours.blue;
+      default:
+        return LunaColours.accent;
+    }
+  }
+
+  static double? percentDone(TransmissionTorrent torrent) {
+    if (torrent.status == TransmissionTorrentStatus.SEED) {
+      return torrent.uploadRatio;
+    }
+
+    return torrent.percentDone;
+  }
+
+  static Color backgroundColor(TransmissionTorrent torrent, Color canvasColor) {
+    if (torrent.status == TransmissionTorrentStatus.SEED) {
+      return LunaColours.accent;
+    }
+
+    return canvasColor;
+  }
+
+  static String? readablePercentDone(TransmissionTorrent torrent) {
+    return '${(percentDone(torrent)! * 100).toStringAsFixed(2)}%';
   }
 }

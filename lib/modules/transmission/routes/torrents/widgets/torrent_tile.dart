@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lunasea/core.dart';
+import 'package:lunasea/extensions/int/duration.dart';
 import 'package:lunasea/extensions/string/string.dart';
 import 'package:lunasea/modules/transmission.dart';
 import 'package:lunasea/modules/transmission/core/types.dart';
@@ -31,17 +32,18 @@ class _State extends State<TransmissionTorrentTile> {
 
   Widget _buildBlockTile() {
     return LunaBlock(
-      //backgroundHeaders: context.read<TransmissionState>().headers,
-      //posterHeaders: context.read<TransmissionState>().headers,
       posterPlaceholderIcon: widget.torrent.toIcon(),
       disabled: false,
       title: widget.torrent.name,
       body: [
         _subtitle1(),
         _subtitle2(),
-        //_subtitle3(),
       ],
-      bottom: LinearProgressIndicator(color: LunaColours.accent, value: widget.torrent.percentDone),
+      bottom: LinearProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(TransmissionUtilities.foregroundColor(widget.torrent)),
+        backgroundColor: TransmissionUtilities.backgroundColor(widget.torrent, Theme.of(context).canvasColor),
+        value: TransmissionUtilities.percentDone(widget.torrent),
+      ),
       onTap: _onTap,
       onLongPress: _onLongPress,
     );
@@ -68,13 +70,7 @@ class _State extends State<TransmissionTorrentTile> {
         TextSpan(text: '${widget.torrent.readableRateDownload()} down'),
         TextSpan(text: LunaUI.TEXT_BULLET.pad()),
         TextSpan(text: '${widget.torrent.readableRateUpload()} up'),
-      ],
-    );
-  }
-
-  TextSpan _subtitle2() {
-    return TextSpan(
-      children: [
+        TextSpan(text: LunaUI.TEXT_BULLET.pad()),
         _buildChildTextSpan(
           widget.torrent.status!.value,
           TransmissionTorrentSorting.STATUS,
@@ -83,15 +79,16 @@ class _State extends State<TransmissionTorrentTile> {
     );
   }
 
-  TextSpan _subtitle3() {
-    TransmissionTorrentSorting _sorting = context.read<TransmissionState>().torrentSortType;
+  TextSpan _subtitle2() {
     return TextSpan(
       children: [
-        if (_sorting == TransmissionTorrentSorting.DATE_ADDED)
-          _buildChildTextSpan(
-            widget.torrent.addedDate.toString(),
-            TransmissionTorrentSorting.DATE_ADDED,
-          ),
+        TextSpan(text: '${widget.torrent.readableDownloadedOrUploaded()}'),
+        TextSpan(text: 'of'.pad()),
+        TextSpan(text: '${widget.torrent.readableTotalSize()} '),
+        TextSpan(text: ' (${TransmissionUtilities.readablePercentDone(widget.torrent)})'),
+        TextSpan(text: LunaUI.TEXT_BULLET.pad()),
+        TextSpan(text: '${'transmission.timeLeft'.tr()}: '),
+        TextSpan(text: widget.torrent.eta!.toInt().asWordDuration()),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:math';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lunasea/modules/transmission.dart';
@@ -117,12 +118,56 @@ class TransmissionTorrent {
   }
 
   String? readableTransferRate(int? bytesPerSecond) {
+    return '${this.readableSize(bytesPerSecond)}/s';
+  }
+
+  String? statusDescription() {
+    if (this.isfinished == true) {
+      return 'transmission.Done'.tr();
+    }
+
+    return this.status!.value!;
+  }
+
+  String? readableDownloaded() {
+    int? bytes = 0;
+
+    if (this.percentDone! > 0) {
+      bytes = (this.sizeWhenDone!.toDouble() * this.percentDone!).toInt() as int?;
+    }
+
+    return this.readableSize(bytes);
+  }
+
+  String? readableTotalSize() {
+    return this.readableSize(this.sizeWhenDone);
+  }
+
+  String readableSize(int? bytesPerSecond) {
     if ((bytesPerSecond ?? 0) <= 0) {
-      return '0 B/s';
+      return '0 B';
     }
 
     const suffixes = ["B", "KB", "MB", "GB", "TB"];
     var i = (log(bytesPerSecond!) / log(1024)).floor();
-    return ((bytesPerSecond / pow(1024, i)).toStringAsFixed(1)) + suffixes[i] + '/s';
+    return '${(bytesPerSecond / pow(1024, i)).toStringAsFixed(1)}${suffixes[i]}';
+  }
+
+  String? readableDownloadedOrUploaded() {
+    if (this.percentDone! < 1) {
+      return this.readableDownloaded();
+    } else {
+      return this.readableUploaded();
+    }
+  }
+
+  String? readableUploaded() {
+    int? bytes = 0;
+
+    if (this.uploadRatio! > 0) {
+      bytes = (this.sizeWhenDone!.toDouble() * this.uploadRatio!).toInt() as int?;
+    }
+
+    return this.readableSize(bytes);
   }
 }

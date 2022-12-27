@@ -35,7 +35,7 @@ extension TransmissionTorrentStatusExtension on TransmissionTorrentStatus {
   String? get value {
     switch (this) {
       case TransmissionTorrentStatus.STOPPED:
-        return 'Stopped';
+        return 'Paused';
       case TransmissionTorrentStatus.CHECK_WAIT:
         return 'Queued to check files';
       case TransmissionTorrentStatus.CHECK:

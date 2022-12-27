@@ -22,6 +22,12 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
   Timer? _timer;
 
   @override
+  void dispose() {
+    _timer!.cancel();
+    super.dispose();
+  }
+
+  @override
   bool get wantKeepAlive => true;
 
   Future<void> _refresh() async => setState(() {
@@ -47,7 +53,7 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
     });
   }
 
-  void _createTimer() => _timer = Timer(const Duration(seconds: 2), _fetchWithoutMessage);
+  void _createTimer() => _timer = Timer(const Duration(seconds: 4), _fetchWithoutMessage);
 
   @override
   Widget build(BuildContext context) {
