@@ -15,8 +15,7 @@ class SABnzbdQueue extends StatefulWidget {
   State<SABnzbdQueue> createState() => _State();
 }
 
-class _State extends State<SABnzbdQueue>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+class _State extends State<SABnzbdQueue> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   Timer? _timer;
   Future? _future;
@@ -37,10 +36,7 @@ class _State extends State<SABnzbdQueue>
     return LunaScaffold(
       scaffoldKey: _scaffoldKey,
       body: _body,
-      floatingActionButton: context.watch<SABnzbdState>().error
-          ? null
-          : SABnzbdQueueFAB(
-              scrollController: SABnzbdNavigationBar.scrollControllers[0]),
+      floatingActionButton: context.watch<SABnzbdState>().error ? null : SABnzbdQueueFAB(scrollController: SABnzbdNavigationBar.scrollControllers[0]),
     );
   }
 
@@ -50,8 +46,7 @@ class _State extends State<SABnzbdQueue>
     super.dispose();
   }
 
-  void _createTimer() =>
-      _timer = Timer(const Duration(seconds: 2), _fetchWithoutMessage);
+  void _createTimer() => _timer = Timer(const Duration(seconds: 2), _fetchWithoutMessage);
 
   Future<void> _refresh() async => setState(() {
         _future = _fetch();
@@ -103,9 +98,7 @@ class _State extends State<SABnzbdQueue>
         child: FutureBuilder(
           future: _future,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                context.read<SABnzbdState>().error)
-              return LunaMessage.error(onTap: _refresh);
+            if (snapshot.connectionState == ConnectionState.done && context.read<SABnzbdState>().error) return LunaMessage.error(onTap: _refresh);
             if (snapshot.hasData) return _list;
             return const LunaLoader();
           },

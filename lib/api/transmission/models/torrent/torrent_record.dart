@@ -1,15 +1,18 @@
 import 'dart:convert';
+import 'dart:ffi';
+import 'dart:math';
+import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:lunasea/modules/transmission.dart';
 
 part 'torrent_record.g.dart';
 
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
-class TransmissionTorrentRecord {
+class TransmissionTorrent {
   @JsonKey(name: 'id')
   int? id;
 
-  @JsonKey(name: 'queueposition')
+  @JsonKey(name: 'queuePosition')
   int? queuePosition;
 
   @JsonKey(name: 'name')
@@ -22,7 +25,7 @@ class TransmissionTorrentRecord {
   )
   TransmissionTorrentStatus? status;
 
-  @JsonKey(name: 'isfinished')
+  @JsonKey(name: 'isFinished')
   bool? isfinished;
 
   @JsonKey(name: 'percentDone')
@@ -31,8 +34,8 @@ class TransmissionTorrentRecord {
   @JsonKey(name: 'eta')
   double? eta;
 
-  @JsonKey(name: 'etaidle')
-  String? etaIdle;
+  @JsonKey(name: 'etaIdle')
+  int? etaIdle;
 
   @JsonKey(
     name: 'error',
@@ -41,37 +44,40 @@ class TransmissionTorrentRecord {
   )
   TransmissionTorrentError? error;
 
-  @JsonKey(name: 'errorstring')
-  String? timeleft;
+  @JsonKey(name: 'errorString')
+  String? errorString;
 
-  @JsonKey(name: 'metadatapercentcomplete')
+  @JsonKey(name: 'timeLeft')
+  int? timeleft;
+
+  @JsonKey(name: 'metadataPercentComplete')
   double? metadataPercentComplete;
 
-  @JsonKey(name: 'peersconnected')
+  @JsonKey(name: 'peersConnected')
   int? peersConnected;
 
-  @JsonKey(name: 'peerssendingtous')
+  @JsonKey(name: 'peersSendingToUs')
   int? peersSendingToUs;
 
-  @JsonKey(name: 'ratedownload')
+  @JsonKey(name: 'rateDownload')
   int? rateDownload;
 
-  @JsonKey(name: 'rateupload')
+  @JsonKey(name: 'rateUpload')
   int? rateUpload;
 
-  @JsonKey(name: 'totalsize')
+  @JsonKey(name: 'totalSize')
   int? totalSize;
 
-  @JsonKey(name: 'sizewhendone')
+  @JsonKey(name: 'sizeWhenDone')
   int? sizeWhenDone;
 
-  @JsonKey(name: 'uploadratio')
-  int? uploadRatio;
+  @JsonKey(name: 'uploadRatio')
+  double? uploadRatio;
 
-  @JsonKey(name: 'addeddate')
+  @JsonKey(name: 'addedDate')
   int? addedDate;
 
-  TransmissionTorrentRecord(
+  TransmissionTorrent(
       {this.id,
       this.queuePosition,
       this.name,
@@ -81,6 +87,7 @@ class TransmissionTorrentRecord {
       this.eta,
       this.etaIdle,
       this.error,
+      this.errorString,
       this.timeleft,
       this.metadataPercentComplete,
       this.peersConnected,
@@ -95,7 +102,27 @@ class TransmissionTorrentRecord {
   @override
   String toString() => json.encode(this.toJson());
 
-  factory TransmissionTorrentRecord.fromJson(Map<String, dynamic> json) => _$TransmissionTorrentRecordFromJson(json);
+  factory TransmissionTorrent.fromJson(Map<String, dynamic> json) => _$TransmissionTorrentFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TransmissionTorrentRecordToJson(this);
+  Map<String, dynamic> toJson() => _$TransmissionTorrentToJson(this);
+
+  IconData? toIcon() => TransmissionUtilities.torrentStatusToIcon(this.status, this.error);
+
+  String? readableRateUpload() {
+    return this.readableTransferRate(this.rateUpload);
+  }
+
+  String? readableRateDownload() {
+    return this.readableTransferRate(this.rateDownload);
+  }
+
+  String? readableTransferRate(int? bytesPerSecond) {
+    if ((bytesPerSecond ?? 0) <= 0) {
+      return '0 B/s';
+    }
+
+    const suffixes = ["B", "KB", "MB", "GB", "TB"];
+    var i = (log(bytesPerSecond!) / log(1024)).floor();
+    return ((bytesPerSecond / pow(1024, i)).toStringAsFixed(1)) + suffixes[i] + '/s';
+  }
 }

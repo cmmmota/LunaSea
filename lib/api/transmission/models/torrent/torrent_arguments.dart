@@ -7,7 +7,7 @@ part 'torrent_arguments.g.dart';
 @JsonSerializable(explicitToJson: true, includeIfNull: false)
 class TransmissionTorrentArguments {
   @JsonKey(name: 'torrents')
-  List<TransmissionTorrentRecord>? torrents;
+  List<TransmissionTorrent>? torrents;
 
   TransmissionTorrentArguments({
     this.torrents,

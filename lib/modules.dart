@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lunasea/core.dart';
 import 'package:lunasea/extensions/string/links.dart';
+import 'package:lunasea/modules/transmission/core/state.dart';
 import 'package:lunasea/router/router.dart';
 import 'package:lunasea/router/routes.dart';
 import 'package:lunasea/router/routes/settings.dart';
@@ -244,7 +245,7 @@ extension LunaModuleMetadataExtension on LunaModule {
       case LunaModule.EXTERNAL_MODULES:
         return LunaColours.accent;
       case LunaModule.TRANSMISSION:
-        return const Color.fromARGB(255, 255, 14, 14);
+        return const Color.fromARGB(255, 182, 91, 91);
     }
   }
 
@@ -511,6 +512,8 @@ extension LunaModuleExtension on LunaModule {
         return context.read<OverseerrState>();
       case LunaModule.TAUTULLI:
         return context.read<TautulliState>();
+      case LunaModule.TRANSMISSION:
+        return context.read<TransmissionState>();
       case LunaModule.EXTERNAL_MODULES:
         return null;
     }

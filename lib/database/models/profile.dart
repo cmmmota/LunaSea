@@ -162,7 +162,7 @@ class LunaProfile extends HiveObject {
   String transmissionUsername;
 
   @JsonKey()
-  @HiveField(53, defaultValue: <String, String>{})
+  @HiveField(53, defaultValue: '')
   String transmissionPassword;
 
   LunaProfile._internal({

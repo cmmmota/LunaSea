@@ -11,6 +11,8 @@ import 'package:lunasea/modules/sabnzbd/core/state.dart';
 import 'package:lunasea/modules/nzbget/core/state.dart';
 import 'package:lunasea/modules/tautulli/core/state.dart';
 import 'package:lunasea/modules.dart';
+import 'package:lunasea/modules/transmission/core/state.dart';
+import 'package:lunasea/modules/transmission/routes/torrents/state.dart';
 import 'package:lunasea/router/router.dart';
 
 import 'package:provider/provider.dart';
@@ -41,6 +43,8 @@ class LunaState {
           ChangeNotifierProvider(create: (_) => SABnzbdState()),
           ChangeNotifierProvider(create: (_) => OverseerrState()),
           ChangeNotifierProvider(create: (_) => TautulliState()),
+          ChangeNotifierProvider(create: (_) => TransmissionState()),
+          ChangeNotifierProvider(create: (_) => TransmissionTorrentsState(context)),
         ],
         child: child,
       ),

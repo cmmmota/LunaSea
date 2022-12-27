@@ -52,11 +52,12 @@ class TransmissionState extends LunaModuleState {
     LunaProfile _profile = LunaProfile.current;
     // Copy profile into state
     _api = null;
-    _enabled = _profile.sonarrEnabled;
-    _host = _profile.sonarrHost;
-    _password = _profile.sonarrKey;
-    _headers = _profile.sonarrHeaders;
-    // Create the API instance if Sonarr is enabled
+    _enabled = _profile.transmissionEnabled;
+    _host = _profile.transmissionHost;
+    _username = _profile.transmissionUsername;
+    _password = _profile.transmissionPassword;
+    //_headers = null;
+    // Create the API instance if Transmission is enabled
     if (_enabled) {
       _api = TransmissionAPI(
         host: _host,
@@ -72,15 +73,15 @@ class TransmissionState extends LunaModuleState {
   /////////////////
 
   String _torrentSearchQuery = '';
-  String get seriesSearchQuery => _torrentSearchQuery;
-  set seriesSearchQuery(String seriesSearchQuery) {
+  String get torrentSearchQuery => _torrentSearchQuery;
+  set torrentSearchQuery(String seriesSearchQuery) {
     _torrentSearchQuery = seriesSearchQuery;
     notifyListeners();
   }
 
   TransmissionTorrentSorting _torrentSortType = TransmissionDatabase.DEFAULT_SORTING_TORRENTS.read();
-  TransmissionTorrentSorting get seriesSortType => _torrentSortType;
-  set seriesSortType(TransmissionTorrentSorting torrentSortType) {
+  TransmissionTorrentSorting get torrentSortType => _torrentSortType;
+  set torrentSortType(TransmissionTorrentSorting torrentSortType) {
     _torrentSortType = torrentSortType;
     notifyListeners();
   }
@@ -96,13 +97,13 @@ class TransmissionState extends LunaModuleState {
   /// SERIES ///
   //////////////
 
-  Future<Map<int, TransmissionTorrentRecord>>? _torrents;
-  Future<Map<int, TransmissionTorrentRecord>>? get series => _torrents;
+  Future<Map<int, TransmissionTorrent>>? _torrents;
+  Future<Map<int, TransmissionTorrent>>? get torrents => _torrents;
   void fetchAllTorrents() {
     if (_api != null) {
       _torrents = _api!.torrent.get().then((torrents) {
         return {
-          for (TransmissionTorrentRecord s in torrents.arguments!.torrents!) s.id!: s,
+          for (TransmissionTorrent s in torrents.arguments!.torrents!) s.id!: s,
         };
       });
     }

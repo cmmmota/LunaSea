@@ -48,7 +48,7 @@ extension TransmissionTorrentSortingExtension on TransmissionTorrentSorting {
     }
   }
 
-  String value(TransmissionTorrentRecord torrent) {
+  String value(TransmissionTorrent torrent) {
     switch (this) {
       case TransmissionTorrentSorting.ALPHABETICAL:
         return torrent.name!;
@@ -80,12 +80,12 @@ extension TransmissionTorrentSortingExtension on TransmissionTorrentSorting {
     }
   }
 
-  List<TransmissionTorrentRecord> sort(List<TransmissionTorrentRecord> data, bool ascending) => _Sorter().byType(data, this, ascending);
+  List<TransmissionTorrent> sort(List<TransmissionTorrent> data, bool ascending) => _Sorter().byType(data, this, ascending);
 }
 
 class _Sorter {
-  List<TransmissionTorrentRecord> byType(
-    List<TransmissionTorrentRecord> data,
+  List<TransmissionTorrent> byType(
+    List<TransmissionTorrent> data,
     TransmissionTorrentSorting type,
     bool ascending,
   ) {
@@ -103,14 +103,14 @@ class _Sorter {
     }
   }
 
-  List<TransmissionTorrentRecord> _alphabetical(List<TransmissionTorrentRecord> series, bool ascending) {
+  List<TransmissionTorrent> _alphabetical(List<TransmissionTorrent> series, bool ascending) {
     ascending
         ? series.sort((a, b) => a.name!.toLowerCase().compareTo(b.name!.toLowerCase()))
         : series.sort((a, b) => b.name!.toLowerCase().compareTo(a.name!.toLowerCase()));
     return series;
   }
 
-  List<TransmissionTorrentRecord> _dateAdded(List<TransmissionTorrentRecord> series, bool ascending) {
+  List<TransmissionTorrent> _dateAdded(List<TransmissionTorrent> series, bool ascending) {
     series.sort((a, b) {
       if (ascending) {
         if (a.addedDate == null) return 1;
@@ -127,7 +127,7 @@ class _Sorter {
     return series;
   }
 
-  List<TransmissionTorrentRecord> _size(List<TransmissionTorrentRecord> series, bool ascending) {
+  List<TransmissionTorrent> _size(List<TransmissionTorrent> series, bool ascending) {
     series.sort((a, b) {
       int _comparison = ascending ? (a.sizeWhenDone ?? 0).compareTo(b.sizeWhenDone ?? 0) : (b.sizeWhenDone ?? 0).compareTo(a.sizeWhenDone ?? 0);
       return _comparison == 0 ? a.name!.toLowerCase().compareTo(b.name!.toLowerCase()) : _comparison;
@@ -135,7 +135,7 @@ class _Sorter {
     return series;
   }
 
-  List<TransmissionTorrentRecord> _queue(List<TransmissionTorrentRecord> series, bool ascending) {
+  List<TransmissionTorrent> _queue(List<TransmissionTorrent> series, bool ascending) {
     series.sort((a, b) {
       int _comparison = ascending ? (a.queuePosition ?? 0).compareTo(b.queuePosition ?? 0) : (b.queuePosition ?? 0).compareTo(a.queuePosition ?? 0);
       return _comparison == 0 ? a.name!.toLowerCase().compareTo(b.name!.toLowerCase()) : _comparison;
@@ -143,7 +143,7 @@ class _Sorter {
     return series;
   }
 
-  List<TransmissionTorrentRecord> _status(List<TransmissionTorrentRecord> series, bool ascending) {
+  List<TransmissionTorrent> _status(List<TransmissionTorrent> series, bool ascending) {
     series.sort((a, b) {
       int _comparison = ascending ? (a.sizeWhenDone ?? 0).compareTo(b.sizeWhenDone ?? 0) : (b.sizeWhenDone ?? 0).compareTo(a.sizeWhenDone ?? 0);
       return _comparison == 0 ? a.name!.toLowerCase().compareTo(b.name!.toLowerCase()) : _comparison;

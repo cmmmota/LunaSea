@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:lunasea/core.dart';
 import 'package:lunasea/modules/transmission.dart';
 
-class SonarrAPIController {
+class TransmissionAPIController {
   Future<bool> removeTorrent({
     required BuildContext context,
-    required TransmissionTorrentRecord torrent,
+    required TransmissionTorrent torrent,
     bool showSnackbar = true,
   }) async {
     if (context.read<TransmissionState>().enabled) {
@@ -44,7 +44,7 @@ class SonarrAPIController {
     return false;
   }
 
-  Future<TransmissionTorrentRecord?> addTorrent({
+  Future<TransmissionTorrent?> addTorrent({
     required BuildContext context,
     bool showSnackbar = true,
   }) async {

@@ -11,21 +11,21 @@ enum TransmissionTorrentStatus {
 }
 
 extension TransmissionTorrentStatusExtension on TransmissionTorrentStatus {
-  TransmissionTorrentStatus? from(String? type) {
+  TransmissionTorrentStatus? from(int? type) {
     switch (type) {
-      case '0':
+      case 0:
         return TransmissionTorrentStatus.STOPPED;
-      case '1':
+      case 1:
         return TransmissionTorrentStatus.CHECK_WAIT;
-      case '2':
+      case 2:
         return TransmissionTorrentStatus.CHECK;
-      case '3':
+      case 3:
         return TransmissionTorrentStatus.DOWNLOAD_WAIT;
-      case '4':
+      case 4:
         return TransmissionTorrentStatus.DOWNLOAD;
-      case '5':
+      case 5:
         return TransmissionTorrentStatus.SEED_WAIT;
-      case '6':
+      case 6:
         return TransmissionTorrentStatus.SEED;
       default:
         return null;

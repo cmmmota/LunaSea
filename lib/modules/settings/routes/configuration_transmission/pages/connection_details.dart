@@ -101,7 +101,7 @@ class _State extends State<ConfigurationTransmissionConnectionDetailsRoute> with
   }
 
   Widget _password() {
-    String password = LunaProfile.current.transmissionUsername;
+    String password = LunaProfile.current.transmissionPassword;
     return LunaBlock(
       title: 'settings.Password'.tr(),
       body: [

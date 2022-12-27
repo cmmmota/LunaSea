@@ -1,9 +1,11 @@
 part of transmission_commands;
 
+String? _sessionId = '';
+
 Future<TransmissionTorrentList> _commandGetTorrents(
   Dio client,
 ) async {
-  Response response = await client.post('', data: {
+  var requestData = {
     "arguments": {
       "fields": [
         "queuePosition",
@@ -25,10 +27,14 @@ Future<TransmissionTorrentList> _commandGetTorrents(
         "rateUpload",
         "totalSize",
         "sizeWhenDone",
-        "uploadRatio"
+        "uploadRatio",
+        "addedDate"
       ],
-      "method": "torrent-get"
-    }
-  });
-  return TransmissionTorrentList.fromJson(response.data);
+    },
+    "method": "torrent-get"
+  };
+
+  var response = await _request(client, requestData);
+
+  return TransmissionTorrentList.fromJson(response);
 }

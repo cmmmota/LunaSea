@@ -1,7 +1,6 @@
 import 'package:lunasea/modules/transmission/core/types.dart';
 import 'package:lunasea/types/list_view_option.dart';
 import 'package:lunasea/database/table.dart';
-import 'package:lunasea/modules/transmission/core/types/filter_torrents.dart';
 
 enum TransmissionDatabase<T> with LunaTableMixin<T> {
   NAVIGATION_INDEX<int>(0),

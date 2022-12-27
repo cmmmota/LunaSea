@@ -8,15 +8,15 @@ enum TransmissionTorrentError {
 }
 
 extension TransmissionTorrentErrorExtension on TransmissionTorrentError {
-  TransmissionTorrentError? from(String? type) {
+  TransmissionTorrentError? from(int? type) {
     switch (type) {
-      case '0':
+      case 0:
         return TransmissionTorrentError.OK;
-      case '1':
+      case 1:
         return TransmissionTorrentError.TRACKER_WARNING;
-      case '2':
+      case 2:
         return TransmissionTorrentError.TRACKER_ERROR;
-      case '3':
+      case 3:
         return TransmissionTorrentError.LOCAL_ERROR;
       default:
         return null;

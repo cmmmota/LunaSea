@@ -1,7 +1,8 @@
 library transmission;
 
-import 'package:dio/dio.dart';
 import 'package:lunasea/api/transmission/controllers.dart';
+import 'package:lunasea/core.dart';
+import 'package:lunasea/modules/search.dart';
 
 class TransmissionAPI {
   TransmissionAPI._internal({
@@ -20,6 +21,11 @@ class TransmissionAPI {
     int maxRedirects = 5,
   }) {
     headers ??= <String, dynamic>{};
+
+    var credential = utf8.fuse(base64).encode('$username:$password');
+    var basicAuth = 'Basic $credential';
+
+    headers['authorization'] = basicAuth;
 
     Dio _dio = Dio(
       BaseOptions(

@@ -117,6 +117,7 @@ enum SettingsRoutes with LunaRoutesMixin {
   CONFIGURATION_TAUTULLI_DEFAULT_PAGES('default_pages'),
   CONFIGURATION_TRANSMISSION('transmission'),
   CONFIGURATION_TRANSMISSION_CONNECTION_DETAILS('connection_details'),
+  CONFIGURATION_TRANSMISSION_DEFAULT_OPTIONS('default_options'),
   CONFIGURATION_WAKE_ON_LAN('wake_on_lan'),
   DEBUG_MENU('debug_menu'),
   DEBUG_MENU_UI('ui'),
@@ -275,6 +276,8 @@ enum SettingsRoutes with LunaRoutesMixin {
         return route(widget: const ConfigurationTransmissionRoute());
       case SettingsRoutes.CONFIGURATION_TRANSMISSION_CONNECTION_DETAILS:
         return route(widget: const ConfigurationTransmissionConnectionDetailsRoute());
+      case SettingsRoutes.CONFIGURATION_TRANSMISSION_DEFAULT_OPTIONS:
+        return route(widget: const ConfigurationTransmissionDefaultOptionsRoute());
       case SettingsRoutes.CONFIGURATION_WAKE_ON_LAN:
         return route(widget: const ConfigurationWakeOnLANRoute());
       case SettingsRoutes.DEBUG_MENU:
@@ -338,6 +341,7 @@ enum SettingsRoutes with LunaRoutesMixin {
           SettingsRoutes.CONFIGURATION_SONARR.routes,
           SettingsRoutes.CONFIGURATION_TAUTULLI.routes,
           SettingsRoutes.CONFIGURATION_WAKE_ON_LAN.routes,
+          SettingsRoutes.CONFIGURATION_TRANSMISSION.routes,
         ];
       case SettingsRoutes.CONFIGURATION_DASHBOARD:
         return [
@@ -420,6 +424,11 @@ enum SettingsRoutes with LunaRoutesMixin {
       case SettingsRoutes.CONFIGURATION_TAUTULLI_CONNECTION_DETAILS:
         return [
           SettingsRoutes.CONFIGURATION_TAUTULLI_CONNECTION_DETAILS_HEADERS.routes,
+        ];
+      case SettingsRoutes.CONFIGURATION_TRANSMISSION:
+        return [
+          SettingsRoutes.CONFIGURATION_TRANSMISSION_CONNECTION_DETAILS.routes,
+          SettingsRoutes.CONFIGURATION_TRANSMISSION_DEFAULT_OPTIONS.routes,
         ];
       case SettingsRoutes.DEBUG_MENU:
         return [

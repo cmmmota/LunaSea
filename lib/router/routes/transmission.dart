@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lunasea/modules.dart';
 import 'package:lunasea/modules/transmission.dart';
+import 'package:lunasea/modules/transmission/routes/transmission/route.dart';
 import 'package:lunasea/router/routes.dart';
 import 'package:lunasea/vendor.dart';
 

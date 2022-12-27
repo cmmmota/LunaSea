@@ -1,10 +1,13 @@
-/// Library containing all logic and accessors to make calls to Sonarr's API.
+/// Library containing all logic and accessors to make calls to Transmission's API.
 library transmission_commands;
+
+import 'dart:io';
 
 import 'package:lunasea/api/transmission/models.dart';
 import 'package:lunasea/api/transmission/types.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
+import 'package:lunasea/database/tables/transmission.dart';
 
 // Command
 part 'controllers/command/command.dart';
