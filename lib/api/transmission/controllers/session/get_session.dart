@@ -17,6 +17,16 @@ Future<TransmissionSession> _commandGetSession(
   return TransmissionSession.fromJson(result);
 }
 
+Future<TransmissionSessionStatistics> _commandGetSessionStatistics(
+  Dio client,
+) async {
+  var requestData = {"method": "session-stats"};
+
+  var result = await _request(client, requestData);
+
+  return TransmissionSessionStatistics.fromJson(result);
+}
+
 Future<dynamic> _request(Dio client, dynamic requestData) async {
   bool breakRequest = false;
   var errorCount = 0;

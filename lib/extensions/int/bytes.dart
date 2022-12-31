@@ -1,3 +1,5 @@
+import 'dart:math';
+
 extension IntegerAsBytesExtension on int? {
   static const _BIT_CHUNK = 1000;
   static const _BIT_SIZES = ['b', 'Kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb'];
@@ -31,6 +33,19 @@ extension IntegerAsBytesExtension on int? {
     }
 
     return '${size.toStringAsFixed(decimals)} ${_BYTE_SIZES[idx]}';
+  }
+
+  String asReadableSize() {
+    if ((this ?? 0) <= 0) {
+      return '0 ${_BYTE_SIZES[0]}';
+    }
+
+    var i = (log(this!) / log(1024)).floor();
+    return '${(this! / pow(1024, i)).toStringAsFixed(1)}${_BYTE_SIZES[i]}';
+  }
+
+  String? asReadableTransferRate() {
+    return '${this.asReadableSize()}/s';
   }
 
   String asBits({int decimals = 2}) => _toBits(decimals, 0);

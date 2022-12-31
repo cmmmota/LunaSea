@@ -1,9 +1,8 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:lunasea/extensions/int/bytes.dart';
 import 'package:lunasea/modules/transmission.dart';
 
 part 'torrent_record.g.dart';
@@ -78,6 +77,8 @@ class TransmissionTorrent {
   @JsonKey(name: 'addedDate')
   int? addedDate;
 
+  bool isSelected = false;
+
   TransmissionTorrent(
       {this.id,
       this.queuePosition,
@@ -110,15 +111,11 @@ class TransmissionTorrent {
   IconData? toIcon() => TransmissionUtilities.torrentStatusToIcon(this.status, this.error);
 
   String? readableRateUpload() {
-    return this.readableTransferRate(this.rateUpload);
+    return this.rateUpload.asReadableTransferRate();
   }
 
   String? readableRateDownload() {
-    return this.readableTransferRate(this.rateDownload);
-  }
-
-  String? readableTransferRate(int? bytesPerSecond) {
-    return '${this.readableSize(bytesPerSecond)}/s';
+    return this.rateDownload.asReadableTransferRate();
   }
 
   String? statusDescription() {
@@ -133,24 +130,14 @@ class TransmissionTorrent {
     int? bytes = 0;
 
     if (this.percentDone! > 0) {
-      bytes = (this.sizeWhenDone!.toDouble() * this.percentDone!).toInt() as int?;
+      bytes = (this.sizeWhenDone!.toDouble() * this.percentDone!).toInt();
     }
 
-    return this.readableSize(bytes);
+    return bytes.asReadableSize();
   }
 
   String? readableTotalSize() {
-    return this.readableSize(this.sizeWhenDone);
-  }
-
-  String readableSize(int? bytesPerSecond) {
-    if ((bytesPerSecond ?? 0) <= 0) {
-      return '0 B';
-    }
-
-    const suffixes = ["B", "KB", "MB", "GB", "TB"];
-    var i = (log(bytesPerSecond!) / log(1024)).floor();
-    return '${(bytesPerSecond / pow(1024, i)).toStringAsFixed(1)}${suffixes[i]}';
+    return this.sizeWhenDone.asReadableSize();
   }
 
   String? readableDownloadedOrUploaded() {
@@ -165,9 +152,9 @@ class TransmissionTorrent {
     int? bytes = 0;
 
     if (this.uploadRatio! > 0) {
-      bytes = (this.sizeWhenDone!.toDouble() * this.uploadRatio!).toInt() as int?;
+      bytes = (this.sizeWhenDone!.toDouble() * this.uploadRatio!).toInt();
     }
 
-    return this.readableSize(bytes);
+    return bytes.asReadableSize();
   }
 }

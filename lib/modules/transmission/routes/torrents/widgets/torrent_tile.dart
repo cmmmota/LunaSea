@@ -6,13 +6,15 @@ import 'package:lunasea/modules/transmission.dart';
 import 'package:lunasea/modules/transmission/core/types.dart';
 
 class TransmissionTorrentTile extends StatefulWidget {
-  static final itemExtent = LunaBlock.calculateItemExtent(3);
+  static final itemExtent = LunaBlock.calculateItemExtent(2);
 
   final TransmissionTorrent torrent;
+  final TransmissionState state;
 
   const TransmissionTorrentTile({
     Key? key,
     required this.torrent,
+    required this.state,
   }) : super(key: key);
 
   @override
@@ -33,6 +35,7 @@ class _State extends State<TransmissionTorrentTile> {
   Widget _buildBlockTile() {
     return LunaBlock(
       posterPlaceholderIcon: widget.torrent.toIcon(),
+      backgroundColor: widget.torrent.isSelected ? LunaColours.blue : null,
       disabled: false,
       title: widget.torrent.name,
       body: [
@@ -94,9 +97,21 @@ class _State extends State<TransmissionTorrentTile> {
   }
 
   Future<void> _onTap() async {
-    // TransmissionRoutes.SERIES.go(params: {
-    //   'series': widget.torrent.id!.toString(),
-    // });
+    TransmissionTorrent? selectedTorrent = this.widget.torrent;
+
+    if (this.widget.state.selectedTorrent == selectedTorrent) {
+      this.widget.state.selectedTorrent?.isSelected = false;
+
+      selectedTorrent = null;
+    }
+
+    setState(() {
+      this.widget.state.selectedTorrent = selectedTorrent;
+
+      if (selectedTorrent != null) {
+        selectedTorrent.isSelected = true;
+      }
+    });
   }
 
   Future<void> _onLongPress() async {

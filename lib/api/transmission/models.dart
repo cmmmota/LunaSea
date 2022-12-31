@@ -9,3 +9,5 @@ export 'models/torrent/torrents.dart';
 /// Session
 export 'models/session/session.dart';
 export 'models/session/session_arguments.dart';
+export 'models/session/session_statistics.dart';
+export 'models/session/session_statistics_arguments.dart';

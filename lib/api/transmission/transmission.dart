@@ -2,7 +2,6 @@ library transmission;
 
 import 'package:lunasea/api/transmission/controllers.dart';
 import 'package:lunasea/core.dart';
-import 'package:lunasea/modules/search.dart';
 
 class TransmissionAPI {
   TransmissionAPI._internal({
@@ -39,7 +38,7 @@ class TransmissionAPI {
 
     return TransmissionAPI._internal(
       httpClient: _dio,
-      command: TransmissionControllerCommand(_dio),
+      command: TransmissionControllerCommands(_dio),
       torrent: TransmissionControllerTorrents(_dio),
       session: TransmissionControllerSession(_dio),
     );
@@ -50,7 +49,7 @@ class TransmissionAPI {
   }) {
     return TransmissionAPI._internal(
       httpClient: client,
-      command: TransmissionControllerCommand(client),
+      command: TransmissionControllerCommands(client),
       torrent: TransmissionControllerTorrents(client),
       session: TransmissionControllerSession(client),
     );
@@ -58,7 +57,7 @@ class TransmissionAPI {
 
   final Dio httpClient;
 
-  final TransmissionControllerCommand command;
+  final TransmissionControllerCommands command;
   final TransmissionControllerTorrents torrent;
   final TransmissionControllerSession session;
 }

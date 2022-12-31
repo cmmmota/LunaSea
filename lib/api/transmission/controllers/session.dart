@@ -2,7 +2,7 @@ part of transmission_commands;
 
 /// Facilitates, encapsulates, and manages individual calls related to system within transmission.
 ///
-/// [TransmissionControllerSystem] internally handles routing the HTTP client to the API calls.
+/// [TransmissionControllerSession] internally handles routing the HTTP client to the API calls.
 class TransmissionControllerSession {
   final Dio _client;
 
@@ -13,4 +13,6 @@ class TransmissionControllerSession {
   ///
   /// Returns session status information.
   Future<TransmissionSession> getStatus() async => _commandGetSession(_client);
+
+  Future<TransmissionSessionStatistics> getStatistics() async => _commandGetSessionStatistics(_client);
 }

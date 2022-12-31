@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:lunasea/core.dart';
 import 'package:lunasea/modules/transmission.dart';
 import 'package:lunasea/modules/transmission/core/types.dart';
+import 'package:lunasea/modules/transmission/routes/torrents/widgets/statistics_bar.dart';
+import 'package:lunasea/modules/transmission/routes/torrents/widgets/torrent_top_bar.dart';
 import 'package:lunasea/modules/transmission/routes/transmission/widgets.dart';
 import 'package:lunasea/router/routes/transmission.dart';
 
@@ -19,11 +21,13 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshKey = GlobalKey<RefreshIndicatorState>();
 
+  late TransmissionState _state = context.read<TransmissionState>();
+
   Timer? _timer;
 
   @override
   void dispose() {
-    _timer!.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -39,9 +43,10 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
   }
 
   Future _fetch() async {
-    TransmissionState _state = context.read<TransmissionState>();
     _state.fetchAllTorrents();
-    return _state.torrents!.then((data) {
+    _state.fetchStatistics();
+
+    return Future.wait([_state.torrents!, _state.statistics!]).then((data) {
       try {
         if (_timer == null || !_timer!.isActive) _createTimer();
         return true;
@@ -53,7 +58,7 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
     });
   }
 
-  void _createTimer() => _timer = Timer(const Duration(seconds: 4), _fetchWithoutMessage);
+  void _createTimer() => _timer = Timer(const Duration(seconds: 5), _fetchWithoutMessage);
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +86,17 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
       context: context,
       key: _refreshKey,
       onRefresh: _refresh,
-      child: Selector<TransmissionState, Future<Map<int?, TransmissionTorrent>>?>(
-        selector: (_, state) => state.torrents,
-        builder: (context, torrents, _) => FutureBuilder(
-          future: torrents,
-          builder: (context, AsyncSnapshot<Map<int?, TransmissionTorrent?>> snapshot) {
+      child: Selector<TransmissionState, Tuple2<Future<Map<int?, TransmissionTorrent>>?, Future<TransmissionSessionStatistics>?>>(
+        selector: (_, state) => Tuple2(
+          state.torrents,
+          state.statistics,
+        ),
+        builder: (context, tuple, _) => FutureBuilder(
+          future: Future.wait([
+            tuple.item1!,
+            tuple.item2!,
+          ]),
+          builder: (context, AsyncSnapshot<List<Object>> snapshot) {
             if (snapshot.hasError) {
               if (snapshot.connectionState != ConnectionState.waiting) {
                 LunaLogger().error(
@@ -99,7 +110,13 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
               );
             }
             if (snapshot.hasData) {
-              return _torrents(snapshot.data as Map<int, TransmissionTorrent>);
+              return LunaListView(
+                controller: TransmissionNavigationBar.scrollControllers[0],
+                children: [
+                  TransmissionTorrentTopBar(statistics: snapshot.data![1] as TransmissionSessionStatistics),
+                  _torrents(snapshot.data![0] as Map<int, TransmissionTorrent>)
+                ],
+              );
             }
             return const LunaLoader();
           },
@@ -128,12 +145,16 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
   Widget _torrents(
     Map<int, TransmissionTorrent> torrents,
   ) {
-    if (torrents.isEmpty)
-      return LunaMessage(
-        text: 'transmission.NoTorrentsFound'.tr(),
-        buttonText: 'transmission.Refresh'.tr(),
-        onTap: _refreshKey.currentState!.show,
-      );
+    if (torrents.isEmpty) {
+      return Row(children: [
+        LunaMessage(
+          text: 'transmission.NoTorrentsFound'.tr(),
+          buttonText: 'transmission.Refresh'.tr(),
+          onTap: _refreshKey.currentState!.show,
+        )
+      ]);
+    }
+
     return Selector<TransmissionState, String>(
       selector: (_, state) => state.torrentSearchQuery,
       builder: (context, query, _) {
@@ -174,6 +195,7 @@ class _State extends State<TransmissionTorrentsRoute> with AutomaticKeepAliveCli
       itemExtent: TransmissionTorrentTile.itemExtent,
       itemBuilder: (context, index) => TransmissionTorrentTile(
         torrent: torrents[index],
+        state: _state,
       ),
     );
   }

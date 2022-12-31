@@ -11,10 +11,12 @@ class TransmissionState extends LunaModuleState {
   @override
   void reset() {
     _torrents = null;
+    _statistics = null;
 
     resetProfile();
     if (_enabled) {
       fetchAllTorrents();
+      fetchStatistics();
     }
     notifyListeners();
   }
@@ -94,7 +96,7 @@ class TransmissionState extends LunaModuleState {
   }
 
   //////////////
-  /// SERIES ///
+  /// TORRENTS ///
   //////////////
 
   Future<Map<int, TransmissionTorrent>>? _torrents;
@@ -110,16 +112,60 @@ class TransmissionState extends LunaModuleState {
     notifyListeners();
   }
 
-  Future<void> fetchTorrent(int torrentId) async {
-    // if (_api != null) {
-    //   TransmissionTorrentList torrents = await _api!.torrent.get(id: torrentId);
-    //   (await _torrents)![torrentId] = torrent;
-    // }
-    // notifyListeners();
-  }
-
   Future<void> removeSingleTorrent(int torrentId) async {
     (await _torrents)!.remove(torrentId);
+    notifyListeners();
+  }
+
+  TransmissionTorrent? _selectedTorrent;
+  TransmissionTorrent? get selectedTorrent {
+    return _selectedTorrent;
+  }
+
+  set selectedTorrent(TransmissionTorrent? value) {
+    _selectedTorrent = value;
+    notifyListeners();
+  }
+
+  Future<void> resumeCurrent() async {
+    if (_api != null && this.selectedTorrent != null) {
+      await _api!.command.resumeTorrents([this.selectedTorrent!.id!]);
+    }
+    notifyListeners();
+  }
+
+  Future<void> pauseCurrent() async {
+    if (_api != null && this.selectedTorrent != null) {
+      await _api!.command.pauseTorrents([this.selectedTorrent!.id!]);
+    }
+    notifyListeners();
+  }
+
+  Future<void> resumeAll() async {
+    if (_api != null) {
+      await _api!.command.resumeAllTorrents();
+    }
+    notifyListeners();
+  }
+
+  Future<void> pauseAll() async {
+    if (_api != null) {
+      await _api!.command.pauseAllTorrents();
+    }
+    notifyListeners();
+  }
+
+  //////////////////
+  /// Statistics ///
+  //////////////////
+  Future<TransmissionSessionStatistics>? _statistics;
+  Future<TransmissionSessionStatistics>? get statistics => _statistics;
+  void fetchStatistics() {
+    if (_api != null) {
+      _statistics = _api!.session.getStatistics().then((statistics) {
+        return statistics;
+      });
+    }
     notifyListeners();
   }
 }

@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:lunasea/database/tables/transmission.dart';
 
 // Command
+part 'controllers/commands.dart';
 part 'controllers/command/command.dart';
 
 // Torrents
